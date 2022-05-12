@@ -61,8 +61,8 @@ int main(){
             }
         }
 
-            if ((rect.getPosition().y + rect.getSize().y < groundHeight &&
-                 rect.getPosition().y - rect.getSize().y >= 0) || velocity.y < 0) {
+            if (rect.getPosition().y + rect.getSize().y < groundHeight &&
+                 rect.getPosition().y + rect.getSize().y >= 0) {
 
                 velocity.y += gravity;
                 rect.move(velocity.x, velocity.y);
