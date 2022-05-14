@@ -37,8 +37,7 @@ int main(){
     text2.setPosition(125, 200);
 
     Bird bird(groundHeight);
-    Obstacle obstacle1(1);
-    Obstacle obstacle2(2);
+    Obstacle obstacle1;
 
     while(Window.isOpen()){
         sf::Event Event{};
@@ -57,7 +56,6 @@ int main(){
                     }else if(Event.key.code == sf::Keyboard::Enter && bird.isDead()){
                         bird.reset();
                         obstacle1.reuse();
-                        obstacle2.reuse();
                     }
                     break;
 
@@ -65,10 +63,18 @@ int main(){
             }
         }
 
+
+        const auto &bird_bounds = bird.getBody().getGlobalBounds();
+        if(  bird_bounds.intersects(obstacle1.top_obstacle.getGlobalBounds()) ||
+             bird_bounds.intersects(obstacle1.bottom_obstacle.getGlobalBounds())
+             )
+            bird.kill();
+
+
         if(bird.isDead()){
             //game over view
             obstacle1.reset();
-            obstacle2.reset();
+
             Window.clear(sf::Color(111, 11, 0));
             Window.draw(text);
             Window.draw(text2);
@@ -77,31 +83,21 @@ int main(){
 
             if(!bird.isLocked()) {
                 obstacle1.update();
-                obstacle2.update();
             }
 
             if (obstacle1.bottom_obstacle.getPosition().x < bird.getBody().getPosition().x)
                 ++score;
 
-            if (obstacle2.bottom_obstacle.getPosition().x < bird.getBody().getPosition().x)
-                ++score;
-
-            //bum
 
             if (obstacle1.bottom_obstacle.getPosition().x < -80){
                 obstacle1.reuse();
             }
 
-            if (obstacle2.bottom_obstacle.getPosition().x < -80 ){
-                obstacle2.reuse();
-            }
 
             Window.clear(sf::Color(0, 240, 255));
             Window.draw(bird.getBody());
             Window.draw(obstacle1.bottom_obstacle);
             Window.draw(obstacle1.top_obstacle);
-            Window.draw(obstacle2.bottom_obstacle);
-            Window.draw(obstacle2.top_obstacle);
         }
 
         Window.display();

@@ -3,6 +3,7 @@
 //
 #include <iostream>
 #include <SFML/Graphics.hpp>
+#include "Obstacle.h"
 
 #ifndef SFMLDEMO_BIRD_H
 #define SFMLDEMO_BIRD_H
@@ -21,6 +22,8 @@ public:
     bool isLocked() const { return locked; };
 
     void update();
+
+    void kill(){this->dead = true;};
 
     sf::Sprite getBody() const { return body; };
 

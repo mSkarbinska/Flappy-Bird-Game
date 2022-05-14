@@ -38,3 +38,4 @@ void Bird::reset() {
     dead = false;
     body.setPosition(center);
 }
+

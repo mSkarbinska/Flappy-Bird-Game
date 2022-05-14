@@ -11,13 +11,12 @@
 class Obstacle
 {
 public:
-    int id;
     sf::Texture texture;
     sf::Sprite bottom_obstacle;
     sf::Sprite top_obstacle;
     sf::Vector2f velocity;
 
-    Obstacle(int id);
+    Obstacle();
 
     void update();
     void reuse();
