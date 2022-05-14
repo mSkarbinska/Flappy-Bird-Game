@@ -10,6 +10,8 @@ Bird::Bird(int levelHeight) {
 
     this->levelHeight = levelHeight;
     body.setTexture(texture);
+    body.scale(sf::Vector2f(1.2f, 1.2f));
+
     body.setPosition(center);
 }
 

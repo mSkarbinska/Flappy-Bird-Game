@@ -18,6 +18,8 @@ public:
 
     bool isDead() const { return dead; };
 
+    bool isLocked() const { return locked; };
+
     void update();
 
     sf::Sprite getBody() const { return body; };
@@ -28,7 +30,7 @@ private:
     bool dead = false;
     const float gravity = 0.8;
     const float jumpSpeed = -13.0;
-    const sf::Vector2f center = {300, 425};
+    const sf::Vector2f center = {260, 425};
     sf::Vector2f velocity = {0, 0};
     sf::Texture texture;
     sf::Sprite body;
