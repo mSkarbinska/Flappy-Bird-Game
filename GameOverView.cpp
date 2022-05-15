@@ -47,7 +47,7 @@ sf::Text GameOverView::getBestScoreText(int i) {
     bestScoreText.setString(str);
     bestScoreText.setFont(font2);
     bestScoreText.setCharacterSize(35);
-    bestScoreText.setPosition(275 , 500);
+    bestScoreText.setPosition(260    , 500);
     return bestScoreText;
 }
 

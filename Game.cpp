@@ -40,6 +40,7 @@ void Game::drawGameOverView() {
 void Game::mainloop() {
     Bird bird(groundHeight);
     Obstacle obstacle1;
+    bool cleared  = false;
 
     while(window.isOpen()){
         sf::Event Event{};
@@ -87,8 +88,10 @@ void Game::mainloop() {
                 obstacle1.update();
             }
 
-            if (obstacle1.bottom_obstacle.getPosition().x < bird.getBody().getPosition().x)
+            if (obstacle1.bottom_obstacle.getPosition().x < bird.getBody().getPosition().x && !cleared) {
                 ++score;
+                cleared = true;
+            }
 
             std::ostringstream oss;
             oss << score;
@@ -97,8 +100,8 @@ void Game::mainloop() {
 
             if (obstacle1.bottom_obstacle.getPosition().x < -80){
                 obstacle1.reuse();
+                cleared = false;
             }
-
 
             window.clear(sf::Color(0,0,0));
             window.draw(background);
@@ -106,7 +109,6 @@ void Game::mainloop() {
             window.draw(obstacle1.bottom_obstacle);
             window.draw(obstacle1.top_obstacle);
             window.draw(scoreText);
-
         }
 
         window.display();
