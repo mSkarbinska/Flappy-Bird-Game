@@ -5,9 +5,9 @@
 #include "Obstacle.h"
 
 Obstacle::Obstacle(){
-    velocity = { -3.0,0 };
+    velocity = { -3.5,0 };
 
-    if (!texture.loadFromFile("C:/Users/mskar/CLionProjects/Flappy-Bird-Game/images/obstacle.png"))
+    if (!texture.loadFromFile("../resources/obstacle.png"))
         throw std::runtime_error("Failed to load image\n");
 
     bottom_obstacle.setTexture(texture);
@@ -25,12 +25,12 @@ Obstacle::Obstacle(){
 void Obstacle::update(){
     bottom_obstacle.move(velocity);
     auto bottom_position = bottom_obstacle.getPosition();
-    top_obstacle.setPosition(bottom_position.x + 75, bottom_position.y - 250);
+    top_obstacle.setPosition(bottom_position.x + 89, bottom_position.y - 250);
 
 }
 
 void Obstacle::reuse(){
-    velocity = { -3.0,0 };
+    velocity = { -3.5,0 };
     const auto new_pos = rand() % 400 + 300;
     bottom_obstacle.setPosition(700 , (float)new_pos);
     const auto& bottom_position = bottom_obstacle.getPosition();
