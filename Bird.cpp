@@ -5,7 +5,7 @@
 #include "Bird.h"
 
 Bird::Bird(int levelHeight) {
-    if (!texture.loadFromFile("C:/Users/mskar/CLionProjects/Flappy-Bird-Game/images/Flappy.png"))
+    if (!texture.loadFromFile("../resources/Flappy.png"))
         throw std::runtime_error("Failed to load image.");
 
     this->levelHeight = levelHeight;

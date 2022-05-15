@@ -18,6 +18,9 @@ public:
     void drawGameOverView();
     int getGroundHeight()const {return groundHeight;};
     void mainloop();
+    void saveScore() const;
+    int getBestScore() const;
+
 private:
     int groundHeight = 850;
     int groundWidth = 600;
@@ -25,6 +28,12 @@ private:
     sf::Image icon;
     sf::RenderWindow window;
     GameOverView gameOver;
+    sf::Texture backgroundTexture;
+    sf::Sprite background;
+    sf::Text scoreText;
+    sf::Font font;
+
+
 };
 
 
