@@ -21,7 +21,7 @@
 cmake_minimum_required(VERSION 3.2)
 project(SFMLDemo)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
-set(SOURCE_FILES main.cpp)
+set(SOURCE_FILES main.cpp Bird.cpp Bird.h Game.cpp Game.h Obstacle.cpp Obstacle.h GameOverView.cpp GameOverView.h)
 add_executable(SFMLDemo ${SOURCE_FILES})
 set(SFML_ROOT "C:/Users/mskar/CLionProjects/SkarbinskaMagdalena/SFML-2.5.1")
 include_directories("C:/Users/mskar/CLionProjects/SkarbinskaMagdalena/SFML-2.5.1/include")
