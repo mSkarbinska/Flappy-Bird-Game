@@ -10,6 +10,7 @@ Bird::Bird(int levelHeight) {
 
     this->levelHeight = levelHeight;
     body.setTexture(texture);
+    body.setOrigin(middle);
     body.scale(sf::Vector2f(1.2f, 1.2f));
 
     body.setPosition(center);
@@ -20,6 +21,13 @@ void Bird::update() {
         if (body.getPosition().y + texture.getSize().y < levelHeight &&
             body.getPosition().y + texture.getSize().y >= 0) {
             velocity.y += gravity;
+
+            if(velocity.y<0){
+                body.setRotation(fly_rot);
+            }else{
+                body.rotate(fall_rot);
+            }
+
             body.move(velocity);
         } else {
             dead = true;

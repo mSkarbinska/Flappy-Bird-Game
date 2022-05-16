@@ -18,14 +18,16 @@ Obstacle::Obstacle(){
     top_obstacle.rotate(180);
 
     const auto&  bottom_position = bottom_obstacle.getPosition();
-    top_obstacle.setPosition(bottom_position.x+75, bottom_position.y - 250);
+    top_obstacle.setPosition(bottom_position.x+87, bottom_position.y - 250);
 
 }
 
 void Obstacle::update(){
     bottom_obstacle.move(velocity);
     auto bottom_position = bottom_obstacle.getPosition();
-    top_obstacle.setPosition(bottom_position.x + 89, bottom_position.y - 250);
+
+    top_obstacle.setPosition(bottom_position.x + 87, bottom_position.y - 250);
+
 
 }
 
@@ -34,7 +36,7 @@ void Obstacle::reuse(){
     const auto new_pos = rand() % 400 + 300;
     bottom_obstacle.setPosition(700 , (float)new_pos);
     const auto& bottom_position = bottom_obstacle.getPosition();
-    top_obstacle.setPosition(bottom_position.x+75, bottom_position.y - 250);
+    top_obstacle.setPosition(bottom_position.x+87, bottom_position.y - 250);
 
 }
 
@@ -42,5 +44,5 @@ void Obstacle::reset() {
     velocity = { 0,0 };
     bottom_obstacle.setPosition(700 , 450);
     const auto&  bottom_position = bottom_obstacle.getPosition();
-    top_obstacle.setPosition(bottom_position.x+75, bottom_position.y - 250);
+    top_obstacle.setPosition(bottom_position.x+87, bottom_position.y - 250);
 }
