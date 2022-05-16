@@ -25,7 +25,9 @@ Obstacle::Obstacle(){
 void Obstacle::update(){
     bottom_obstacle.move(velocity);
     auto bottom_position = bottom_obstacle.getPosition();
+
     top_obstacle.setPosition(bottom_position.x + 87, bottom_position.y - 250);
+
 
 }
 
