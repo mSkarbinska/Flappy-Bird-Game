@@ -40,7 +40,9 @@ void Game::drawGameOverView() {
 void Game::mainloop() {
     Bird bird(groundHeight);
     Obstacle obstacle1;
+
     bool cleared  = false;
+
 
     while(window.isOpen()){
         sf::Event Event{};
