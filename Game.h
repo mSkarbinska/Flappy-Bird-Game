@@ -30,8 +30,12 @@ private:
     GameOverView gameOver;
     sf::Texture backgroundTexture;
     sf::Sprite background;
+    sf::Texture groundTexture;
+    sf::Sprite ground;
     sf::Text scoreText;
     sf::Font font;
+    sf::Vector2f groundVelocity={-3.5,0};
+
 
 
 };
