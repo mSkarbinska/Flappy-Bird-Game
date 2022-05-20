@@ -10,11 +10,17 @@ Game::Game() {
     backgroundTexture.loadFromFile("../resources/bck.jpg");
     background.setTexture(backgroundTexture);
 
+    groundTexture.loadFromFile("../resources/ground.png");
+    ground.setTexture(groundTexture);
+    ground.setScale(2.5,2.5);
+    ground.setPosition(0, 750);
+
     icon.loadFromFile("../resources/Flappy.png");
 
     window.create(sf::VideoMode(groundWidth, groundHeight, 32), "Flappy Bird",
                             sf::Style::Titlebar | sf::Style::Close);
 
+    window.setVerticalSyncEnabled(true);
     window.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
     window.setFramerateLimit(60);
     window.setKeyRepeatEnabled(false);
@@ -68,14 +74,19 @@ void Game::mainloop() {
                 default: break;
             }
         }
+        if ((ground.getPosition().x + groundTexture.getSize().x*0.71) < 0) {
+            ground.setPosition(0, 750);
+        }
 
+        if(!bird.isDead() && !bird.isLocked())
+            ground.move(groundVelocity);
 
         const auto &bird_bounds = bird.getBody().getGlobalBounds();
         if(  bird_bounds.intersects(obstacle1.top_obstacle.getGlobalBounds()) ||
-             bird_bounds.intersects(obstacle1.bottom_obstacle.getGlobalBounds())
+             bird_bounds.intersects(obstacle1.bottom_obstacle.getGlobalBounds()) ||
+                bird_bounds.intersects(ground.getGlobalBounds())
                 )
             bird.kill();
-
 
 
         if(bird.isDead()){
@@ -111,6 +122,7 @@ void Game::mainloop() {
             window.draw(obstacle1.bottom_obstacle);
             window.draw(obstacle1.top_obstacle);
             window.draw(scoreText);
+            window.draw(ground);
         }
 
         window.display();
