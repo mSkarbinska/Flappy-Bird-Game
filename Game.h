@@ -22,6 +22,7 @@ public:
     int getBestScore() const;
 
 private:
+    float groundLevel=750.0;
     int groundHeight = 850;
     int groundWidth = 600;
     int score = 0;

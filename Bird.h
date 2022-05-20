@@ -17,20 +17,29 @@ public:
 
     void fly();
 
-    bool isDead() const { return dead; };
-
-    bool isLocked() const { return locked; };
-
     void update();
 
-    void kill(){this->dead = true;};
+    void kill();
 
     sf::Sprite getBody() const { return body; };
 
+    bool isDead() const { return dead; };
+
+    bool hitsObstacle(const Obstacle& obstacle);
+
+    bool hitsGround();
+
+    bool onTheGround(){return body.getPosition().y > groundLvl;};
+
+    bool isLocked() const { return locked; };
+
+    void bump();
+
 private:
+    float groundLvl = 750.0;
     int levelHeight;
     const float fly_rot{ -11.5f };
-    const float fall_rot{ 1.0f };
+     float fall_rot{ 1.0f };
     bool locked = true;
     bool dead = false;
     const float gravity = 0.8;
@@ -42,6 +51,7 @@ private:
     const sf::Vector2f middle = {40, 28};
     sf::Texture texture;
     sf::Sprite body;
+
 };
 
 #endif //SFMLDEMO_BIRD_H

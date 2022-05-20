@@ -13,7 +13,7 @@ Game::Game() {
     groundTexture.loadFromFile("../resources/ground.png");
     ground.setTexture(groundTexture);
     ground.setScale(2.5,2.5);
-    ground.setPosition(0, 750);
+    ground.setPosition(0, groundLevel);
 
     icon.loadFromFile("../resources/Flappy.png");
 
@@ -81,15 +81,12 @@ void Game::mainloop() {
         if(!bird.isDead() && !bird.isLocked())
             ground.move(groundVelocity);
 
-        const auto &bird_bounds = bird.getBody().getGlobalBounds();
-        if(  bird_bounds.intersects(obstacle1.top_obstacle.getGlobalBounds()) ||
-             bird_bounds.intersects(obstacle1.bottom_obstacle.getGlobalBounds()) ||
-                bird_bounds.intersects(ground.getGlobalBounds())
-                )
+        if(bird.hitsObstacle(obstacle1)  || bird.onTheGround()) {
+            if(!bird.isDead())bird.bump();
             bird.kill();
+        }
 
-
-        if(bird.isDead()){
+        if(bird.isDead() && bird.onTheGround()){
             obstacle1.reset();
             saveScore();
             drawGameOverView();
@@ -118,9 +115,10 @@ void Game::mainloop() {
 
             window.clear(sf::Color(0,0,0));
             window.draw(background);
-            window.draw(bird.getBody());
             window.draw(obstacle1.bottom_obstacle);
             window.draw(obstacle1.top_obstacle);
+
+            window.draw(bird.getBody());
             window.draw(scoreText);
             window.draw(ground);
         }

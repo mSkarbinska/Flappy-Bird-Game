@@ -28,7 +28,7 @@ void Bird::update() {
                 body.rotate(fall_rot);
             }
 
-            body.move(velocity);
+            if(!onTheGround())body.move(velocity);
         } else {
             dead = true;
             locked = true;
@@ -45,7 +45,25 @@ void Bird::reset() {
     locked = true;
     dead = false;
     body.setRotation(0);
-
     body.setPosition(center);
 }
 
+void Bird::kill() {
+    velocity.x =0;
+    this->dead = true;
+}
+
+
+bool Bird::hitsObstacle(const Obstacle& obstacle) {
+    const auto &bird_bounds = body.getGlobalBounds();
+
+    return bird_bounds.intersects(obstacle.top_obstacle.getGlobalBounds()) ||
+           bird_bounds.intersects(obstacle.bottom_obstacle.getGlobalBounds());
+}
+
+ void Bird::bump() {
+    velocity.y+=3*gravity;
+    fall_rot =2*fall_rot;
+    fly();
+    update();
+}
