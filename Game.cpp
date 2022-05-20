@@ -11,11 +11,6 @@ Game::Game() {
     backgroundTexture.loadFromFile("../resources/bck.jpg");
     background.setTexture(backgroundTexture);
 
-    groundTexture.loadFromFile("../resources/ground.png");
-    ground.setTexture(groundTexture);
-    ground.setScale(2.5,2.5);
-    ground.setPosition(0, groundLevel);
-
     icon.loadFromFile("../resources/Flappy.png");
 
     window.create(sf::VideoMode(groundWidth, groundHeight, 32), "Flappy Bird",
@@ -33,7 +28,6 @@ Game::Game() {
     scoreText.setFont(font);
     scoreText.setCharacterSize(50);
     scoreText.setPosition(25, 25);
-
 }
 
 void Game::drawGameOverView() {
@@ -51,12 +45,11 @@ void Game::drawGameView() {
     window.draw(obstacle1.getTopObstacle());
     window.draw(bird.getBody());
     window.draw(scoreText);
-    window.draw(ground);
+    window.draw(ground.getGround());
 }
 
 void Game::mainloop() {
     bool cleared  = false;
-
 
     while(window.isOpen()){
         sf::Event Event{};
@@ -82,20 +75,19 @@ void Game::mainloop() {
                 default: break;
             }
         }
-        if ((ground.getPosition().x + groundTexture.getSize().x*0.71) < 0) {
-            ground.setPosition(0, 750);
-        }
+
+        ground.updateGround();
 
         if(!bird.isDead() && !bird.isLocked()) {
             obstacle1.setMoveVelocity();
-            groundVelocity = {-3.5, 0};
-            ground.move(groundVelocity);
+            ground.setMoveVelocity();
+            ground.moveGround();
         }
 
         if(bird.hitsObstacle(obstacle1) || bird.onTheGround() || bird.outOfBounds()) {
             bird.kill();
             obstacle1.setInitVelocity();
-            groundVelocity={0,0};
+            ground.stopGround();
         }
 
         if(bird.isDead() &&(bird.outOfBounds() || bird.onTheGround())){
@@ -154,6 +146,7 @@ void Game::saveScore() const {
         std::cout<<"Unable to read file";
         return;
     }
+
     if(score > best){
         f << score;
     }else{

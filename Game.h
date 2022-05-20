@@ -11,6 +11,7 @@
 #include <SFML/Graphics/Text.hpp>
 #include "GameOverView.h"
 #include "Bird.h"
+#include "Ground.h"
 
 class Game {
 public:
@@ -33,11 +34,10 @@ private:
     GameOverView gameOver;
     sf::Texture backgroundTexture;
     sf::Sprite background;
-    sf::Texture groundTexture;
-    sf::Sprite ground;
     sf::Text scoreText;
     sf::Font font;
     sf::Vector2f groundVelocity={-3.5,0};
+    Ground ground;
 
 
 };
