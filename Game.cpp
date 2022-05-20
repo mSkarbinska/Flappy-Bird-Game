@@ -6,6 +6,7 @@
 #include "Game.h"
 #include <fstream>
 using std::ifstream;
+
 Game::Game() {
     backgroundTexture.loadFromFile("../resources/bck.jpg");
     background.setTexture(backgroundTexture);
@@ -43,10 +44,17 @@ void Game::drawGameOverView() {
     window.draw(gameOver.getBestScoreText(getBestScore()));
 }
 
-void Game::mainloop() {
-    Bird bird(groundHeight);
-    Obstacle obstacle1;
+void Game::drawGameView() {
+    window.clear(sf::Color(0,0,0));
+    window.draw(background);
+    window.draw(obstacle1.bottom_obstacle);
+    window.draw(obstacle1.top_obstacle);
+    window.draw(bird.getBody());
+    window.draw(scoreText);
+    window.draw(ground);
+}
 
+void Game::mainloop() {
     bool cleared  = false;
 
 
@@ -54,21 +62,21 @@ void Game::mainloop() {
         sf::Event Event{};
 
         while(window.pollEvent(Event)){
-            //handle events
             switch(Event.type){
                 case sf::Event::Closed:
                     window.close();
                     break;
 
                 case sf::Event::KeyPressed:
-                    if(Event.key.code == sf::Keyboard::Space){
-                        if(!bird.isDead())bird.fly();
+                    if(Event.key.code == sf::Keyboard::Space && !bird.isDead()){
+                        bird.fly();
 
                     }else if(Event.key.code == sf::Keyboard::Enter && bird.isDead()){
                         bird.reset();
                         obstacle1.reuse();
                         score = 0;
                     }
+
                     break;
 
                 default: break;
@@ -107,23 +115,14 @@ void Game::mainloop() {
                 cleared = true;
             }
 
-            std::ostringstream oss;
-            oss << score;
-            std::string str = oss.str();
-            scoreText.setString(str);
+            updateScoreText();
 
             if (obstacle1.bottom_obstacle.getPosition().x < -80){
                 obstacle1.reuse();
                 cleared = false;
             }
 
-            window.clear(sf::Color(0,0,0));
-            window.draw(background);
-            window.draw(obstacle1.bottom_obstacle);
-            window.draw(obstacle1.top_obstacle);
-            window.draw(bird.getBody());
-            window.draw(scoreText);
-            window.draw(ground);
+            drawGameView();
         }
 
         window.display();
@@ -136,6 +135,13 @@ int Game::getBestScore() const {
     int best;
     ff >> best;
     return best;
+}
+
+void Game::updateScoreText()  {
+    std::ostringstream oss;
+    oss << score;
+    std::string str = oss.str();
+    scoreText.setString(str);
 }
 
 void Game::saveScore() const {
