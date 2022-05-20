@@ -4,11 +4,11 @@
 
 #include "Bird.h"
 
-Bird::Bird(int levelHeight) {
+Bird::Bird() {
     if (!texture.loadFromFile("../resources/Flappy.png"))
         throw std::runtime_error("Failed to load image.");
 
-    this->levelHeight = levelHeight;
+
     body.setTexture(texture);
     body.setOrigin(middle);
     body.scale(sf::Vector2f(1.2f, 1.2f));

@@ -11,7 +11,7 @@
 
 class Bird {
 public:
-    explicit Bird(int levelHeight);
+    explicit Bird();
 
     void reset();
 
@@ -35,7 +35,7 @@ public:
 
 private:
     float groundLvl = 750.0;
-    int levelHeight;
+    int levelHeight= 850.0;
     const float fly_rot{ -11.5f };
     const float fall_rot{ 1.0f };
     bool locked = true;

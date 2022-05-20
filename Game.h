@@ -16,8 +16,8 @@ class Game {
 public:
     Game();
     void drawGameOverView();
-    int getGroundHeight()const {return groundHeight;};
     void mainloop();
+    void drawGameView();
     void saveScore() const;
     int getBestScore() const;
 
@@ -26,6 +26,8 @@ private:
     int groundHeight = 850;
     int groundWidth = 600;
     int score = 0;
+    Bird bird;
+    Obstacle obstacle1;
     sf::Image icon;
     sf::RenderWindow window;
     GameOverView gameOver;
@@ -36,7 +38,6 @@ private:
     sf::Text scoreText;
     sf::Font font;
     sf::Vector2f groundVelocity={-3.5,0};
-
 
 
 };
