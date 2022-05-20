@@ -44,6 +44,8 @@ void Bird::fly() {
 void Bird::reset() {
     locked = true;
     dead = false;
+    body.setRotation(0);
+
     body.setPosition(center);
 }
 
