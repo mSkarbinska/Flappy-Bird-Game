@@ -53,12 +53,11 @@ void Bird::kill() {
     this->dead = true;
 }
 
-
-bool Bird::hitsObstacle(const Obstacle& obstacle) {
+bool Bird::hitsObstacle( Obstacle& obstacle) {
     const auto &bird_bounds = body.getGlobalBounds();
 
-    return bird_bounds.intersects(obstacle.top_obstacle.getGlobalBounds()) ||
-           bird_bounds.intersects(obstacle.bottom_obstacle.getGlobalBounds());
+    return bird_bounds.intersects(obstacle.getTopObstacle().getGlobalBounds()) ||
+           bird_bounds.intersects(obstacle.getBottomObstacle().getGlobalBounds());
 }
 
 bool Bird::outOfBounds() {

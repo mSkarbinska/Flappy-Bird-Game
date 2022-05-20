@@ -47,8 +47,8 @@ void Game::drawGameOverView() {
 void Game::drawGameView() {
     window.clear(sf::Color(0,0,0));
     window.draw(background);
-    window.draw(obstacle1.bottom_obstacle);
-    window.draw(obstacle1.top_obstacle);
+    window.draw(obstacle1.getBottomObstacle());
+    window.draw(obstacle1.getTopObstacle());
     window.draw(bird.getBody());
     window.draw(scoreText);
     window.draw(ground);
@@ -87,14 +87,14 @@ void Game::mainloop() {
         }
 
         if(!bird.isDead() && !bird.isLocked()) {
-            obstacle1.velocity={-3.5,0};
+            obstacle1.setMoveVelocity();
             groundVelocity = {-3.5, 0};
             ground.move(groundVelocity);
         }
 
         if(bird.hitsObstacle(obstacle1) || bird.onTheGround() || bird.outOfBounds()) {
             bird.kill();
-            obstacle1.velocity={0,0};
+            obstacle1.setInitVelocity();
             groundVelocity={0,0};
         }
 
@@ -110,14 +110,14 @@ void Game::mainloop() {
                 obstacle1.update();
             }
 
-            if (obstacle1.bottom_obstacle.getPosition().x < bird.getBody().getPosition().x && !cleared) {
+            if (obstacle1.getBottomObstacle().getPosition().x < bird.getBody().getPosition().x && !cleared) {
                 ++score;
                 cleared = true;
             }
 
             updateScoreText();
 
-            if (obstacle1.bottom_obstacle.getPosition().x < -80){
+            if (obstacle1.getBottomObstacle().getPosition().x < -80){
                 obstacle1.reuse();
                 cleared = false;
             }

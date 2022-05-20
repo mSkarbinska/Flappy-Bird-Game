@@ -25,7 +25,7 @@ public:
 
     bool isDead() const { return dead; };
 
-    bool hitsObstacle(const Obstacle& obstacle);
+    bool hitsObstacle( Obstacle& obstacle);
 
     bool outOfBounds();
 

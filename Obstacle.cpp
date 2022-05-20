@@ -5,44 +5,40 @@
 #include "Obstacle.h"
 
 Obstacle::Obstacle(){
-    velocity = { -3.5,0 };
-
     if (!texture.loadFromFile("../resources/obstacle.png"))
         throw std::runtime_error("Failed to load image\n");
 
-    bottom_obstacle.setTexture(texture);
-    bottom_obstacle.scale(sf::Vector2f(1.7f, 1.7f));
-    bottom_obstacle.setPosition(700 , 450);
-
-    top_obstacle = bottom_obstacle;
-    top_obstacle.scale(1, -1);
-
-    const auto&  bottom_position = bottom_obstacle.getPosition();
-    top_obstacle.setPosition(bottom_position.x, bottom_position.y - 250);
-
+    setBottomObstacle();
+    setTopObstacle();
 }
 
 void Obstacle::update(){
-    bottom_obstacle.move(velocity);
-    auto bottom_position = bottom_obstacle.getPosition();
-
-    top_obstacle.setPosition(bottom_position.x , bottom_position.y - 250);
-
-
+    bottomObstacle.move(velocity);
+    topObstacle.setPosition(bottomObstacle.getPosition() - gap);
 }
 
 void Obstacle::reuse(){
-    velocity = { -3.5,0 };
-    const auto new_pos = rand() % 400 + 300;
-    bottom_obstacle.setPosition(700 , (float)new_pos);
-    const auto& bottom_position = bottom_obstacle.getPosition();
-    top_obstacle.setPosition(bottom_position.x, bottom_position.y - 250);
-
+    velocity = moveVelocity;
+    const auto new_pos = rd() % 400 + 300;
+    bottomObstacle.setPosition(bottomObstacleInitPosition.x , (float)new_pos);
+    topObstacle.setPosition(bottomObstacle.getPosition()-gap);
 }
 
 void Obstacle::reset() {
-    velocity = { 0,0 };
-    bottom_obstacle.setPosition(700 , 450);
-    const auto&  bottom_position = bottom_obstacle.getPosition();
-    top_obstacle.setPosition(bottom_position.x, bottom_position.y - 250);
+    velocity = initVelocity;
+    bottomObstacle.setPosition(bottomObstacleInitPosition);
+    topObstacle.setPosition(bottomObstacleInitPosition-gap);
+}
+
+void Obstacle::setTopObstacle() {
+    topObstacle = bottomObstacle;
+    topObstacle.scale(1, -1);
+    topObstacle.setPosition(bottomObstacleInitPosition-gap);
+}
+
+void Obstacle::setBottomObstacle() {
+    bottomObstacle.setTexture(texture);
+    bottomObstacle.scale(sf::Vector2f(1.7f, 1.7f));
+    bottomObstacle.setPosition(bottomObstacleInitPosition);
+
 }
