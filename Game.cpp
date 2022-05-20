@@ -6,14 +6,10 @@
 #include "Game.h"
 #include <fstream>
 using std::ifstream;
+
 Game::Game() {
     backgroundTexture.loadFromFile("../resources/bck.jpg");
     background.setTexture(backgroundTexture);
-
-    groundTexture.loadFromFile("../resources/ground.png");
-    ground.setTexture(groundTexture);
-    ground.setScale(2.5,2.5);
-    ground.setPosition(0, 750);
 
     icon.loadFromFile("../resources/Flappy.png");
 
@@ -32,7 +28,6 @@ Game::Game() {
     scoreText.setFont(font);
     scoreText.setCharacterSize(50);
     scoreText.setPosition(25, 25);
-
 }
 
 void Game::drawGameOverView() {
@@ -43,25 +38,30 @@ void Game::drawGameOverView() {
     window.draw(gameOver.getBestScoreText(getBestScore()));
 }
 
+void Game::drawGameView() {
+    window.clear(sf::Color(0,0,0));
+    window.draw(background);
+    window.draw(obstacle1.getBottomObstacle());
+    window.draw(obstacle1.getTopObstacle());
+    window.draw(bird.getBody());
+    window.draw(scoreText);
+    window.draw(ground.getGround());
+}
+
 void Game::mainloop() {
-    Bird bird(groundHeight);
-    Obstacle obstacle1;
-
     bool cleared  = false;
-
 
     while(window.isOpen()){
         sf::Event Event{};
 
         while(window.pollEvent(Event)){
-            //handle events
             switch(Event.type){
                 case sf::Event::Closed:
                     window.close();
                     break;
 
                 case sf::Event::KeyPressed:
-                    if(Event.key.code == sf::Keyboard::Space){
+                    if(Event.key.code == sf::Keyboard::Space && !bird.isDead()){
                         bird.fly();
 
                     }else if(Event.key.code == sf::Keyboard::Enter && bird.isDead()){
@@ -69,27 +69,28 @@ void Game::mainloop() {
                         obstacle1.reuse();
                         score = 0;
                     }
+
                     break;
 
                 default: break;
             }
         }
-        if ((ground.getPosition().x + groundTexture.getSize().x*0.71) < 0) {
-            ground.setPosition(0, 750);
+
+        ground.updateGround();
+
+        if(!bird.isDead() && !bird.isLocked()) {
+            obstacle1.setMoveVelocity();
+            ground.setMoveVelocity();
+            ground.moveGround();
         }
 
-        if(!bird.isDead() && !bird.isLocked())
-            ground.move(groundVelocity);
-
-        const auto &bird_bounds = bird.getBody().getGlobalBounds();
-        if(  bird_bounds.intersects(obstacle1.top_obstacle.getGlobalBounds()) ||
-             bird_bounds.intersects(obstacle1.bottom_obstacle.getGlobalBounds()) ||
-                bird_bounds.intersects(ground.getGlobalBounds())
-                )
+        if(bird.hitsObstacle(obstacle1) || bird.onTheGround() || bird.outOfBounds()) {
             bird.kill();
+            obstacle1.setInitVelocity();
+            ground.stopGround();
+        }
 
-
-        if(bird.isDead()){
+        if(bird.isDead() &&(bird.outOfBounds() || bird.onTheGround())){
             obstacle1.reset();
             saveScore();
             drawGameOverView();
@@ -101,28 +102,19 @@ void Game::mainloop() {
                 obstacle1.update();
             }
 
-            if (obstacle1.bottom_obstacle.getPosition().x < bird.getBody().getPosition().x && !cleared) {
+            if (obstacle1.getBottomObstacle().getPosition().x < bird.getBody().getPosition().x && !cleared) {
                 ++score;
                 cleared = true;
             }
 
-            std::ostringstream oss;
-            oss << score;
-            std::string str = oss.str();
-            scoreText.setString(str);
+            updateScoreText();
 
-            if (obstacle1.bottom_obstacle.getPosition().x < -80){
+            if (obstacle1.getBottomObstacle().getPosition().x < -80){
                 obstacle1.reuse();
                 cleared = false;
             }
 
-            window.clear(sf::Color(0,0,0));
-            window.draw(background);
-            window.draw(bird.getBody());
-            window.draw(obstacle1.bottom_obstacle);
-            window.draw(obstacle1.top_obstacle);
-            window.draw(scoreText);
-            window.draw(ground);
+            drawGameView();
         }
 
         window.display();
@@ -137,6 +129,13 @@ int Game::getBestScore() const {
     return best;
 }
 
+void Game::updateScoreText()  {
+    std::ostringstream oss;
+    oss << score;
+    std::string str = oss.str();
+    scoreText.setString(str);
+}
+
 void Game::saveScore() const {
     int best = getBestScore();
 
@@ -147,6 +146,7 @@ void Game::saveScore() const {
         std::cout<<"Unable to read file";
         return;
     }
+
     if(score > best){
         f << score;
     }else{
