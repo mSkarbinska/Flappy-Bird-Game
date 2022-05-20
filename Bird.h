@@ -27,19 +27,17 @@ public:
 
     bool hitsObstacle(const Obstacle& obstacle);
 
-    bool hitsGround();
+    bool outOfBounds();
 
     bool onTheGround(){return body.getPosition().y > groundLvl;};
 
     bool isLocked() const { return locked; };
 
-    void bump();
-
 private:
     float groundLvl = 750.0;
     int levelHeight;
     const float fly_rot{ -11.5f };
-     float fall_rot{ 1.0f };
+    const float fall_rot{ 1.0f };
     bool locked = true;
     bool dead = false;
     const float gravity = 0.8;

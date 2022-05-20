@@ -61,9 +61,6 @@ bool Bird::hitsObstacle(const Obstacle& obstacle) {
            bird_bounds.intersects(obstacle.bottom_obstacle.getGlobalBounds());
 }
 
- void Bird::bump() {
-    velocity.y+=3*gravity;
-    fall_rot =2*fall_rot;
-    fly();
-    update();
+bool Bird::outOfBounds() {
+    return body.getPosition().x < 0 || body.getPosition().y < 0;
 }

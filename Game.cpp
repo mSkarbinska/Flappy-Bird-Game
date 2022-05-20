@@ -62,7 +62,7 @@ void Game::mainloop() {
 
                 case sf::Event::KeyPressed:
                     if(Event.key.code == sf::Keyboard::Space){
-                        bird.fly();
+                        if(!bird.isDead())bird.fly();
 
                     }else if(Event.key.code == sf::Keyboard::Enter && bird.isDead()){
                         bird.reset();
@@ -78,15 +78,19 @@ void Game::mainloop() {
             ground.setPosition(0, 750);
         }
 
-        if(!bird.isDead() && !bird.isLocked())
+        if(!bird.isDead() && !bird.isLocked()) {
+            obstacle1.velocity={-3.5,0};
+            groundVelocity = {-3.5, 0};
             ground.move(groundVelocity);
-
-        if(bird.hitsObstacle(obstacle1)  || bird.onTheGround()) {
-            if(!bird.isDead())bird.bump();
-            bird.kill();
         }
 
-        if(bird.isDead() && bird.onTheGround()){
+        if(bird.hitsObstacle(obstacle1) || bird.onTheGround() || bird.outOfBounds()) {
+            bird.kill();
+            obstacle1.velocity={0,0};
+            groundVelocity={0,0};
+        }
+
+        if(bird.isDead() &&(bird.outOfBounds() || bird.onTheGround())){
             obstacle1.reset();
             saveScore();
             drawGameOverView();
@@ -117,7 +121,6 @@ void Game::mainloop() {
             window.draw(background);
             window.draw(obstacle1.bottom_obstacle);
             window.draw(obstacle1.top_obstacle);
-
             window.draw(bird.getBody());
             window.draw(scoreText);
             window.draw(ground);
